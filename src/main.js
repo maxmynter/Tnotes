@@ -52,6 +52,20 @@ function loadNote() {
   }
 }
 
+async function exportNoteToApple(title, content) {
+  try {
+    const result = await invoke('export_to_apple_notes', {
+      title: title,
+      content: content
+    });
+    console.log(result);
+    // Show success message to user
+  } catch (error) {
+    console.error('Error exporting note:', error);
+    // Show error message to user
+  }
+}
+
 window.addEventListener("DOMContentLoaded", () => {
   noteTextarea = document.querySelector("#note-textarea");
   wordCountEl = document.querySelector("#word-count");
@@ -72,6 +86,26 @@ window.addEventListener("DOMContentLoaded", () => {
     cycleTransparency();
     saveNote();
   });
+
+
+  document.querySelector("#export-btn").addEventListener("click", async () => {
+    const content = noteTextarea.value.trim();
+    if (!content) {
+      alert('No content to export!');
+      return;
+    }
+
+    const title = content.split('\n')[0] || 'Note';
+    try {
+      const result = await exportNoteToApple(title, content);
+      alert('Note exported to Apple Notes successfully!');
+    } catch (error) {
+      console.error('Error exporting note:', error);
+      alert('Failed to export note: ' + error);
+    }
+  });
+
+
 
   // Auto-save on window close
   window.addEventListener("beforeunload", saveNote);
