@@ -1,0 +1,135 @@
+:root {
+  font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+  font-size: 16px;
+  line-height: 1.6;
+  font-weight: 400;
+  color: #ffffff;
+  --bg-opacity: 1.0;
+  background-color: rgba(20, 20, 20, var(--bg-opacity));
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  background-color: rgba(20, 20, 20, var(--bg-opacity));
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: transparent;
+}
+
+#note-textarea {
+  flex: 1;
+  background-color: transparent;
+  color: #ffffff;
+  border: none;
+  outline: none;
+  padding: 20px;
+  font-family: inherit;
+  font-size: 16px;
+  line-height: 1.6;
+  resize: none;
+  overflow-y: auto;
+}
+
+#note-textarea::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+#note-textarea:focus {
+  outline: none;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: rgba(30, 30, 30, 1.0);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  min-height: 50px;
+}
+
+.word-count {
+  color: #ffffff;
+  font-size: 14px;
+  opacity: 1.0;
+}
+
+.transparency-control button {
+  background-color: rgba(50, 50, 50, 1.0);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  opacity: 1.0;
+}
+
+.transparency-control button:hover {
+  background-color: rgba(70, 70, 70, 1.0);
+}
+
+.transparency-control button:active {
+  background-color: rgba(40, 40, 40, 1.0);
+}
+
+/* Scrollbar styling for webkit browsers */
+#note-textarea::-webkit-scrollbar {
+  width: 8px;
+}
+
+#note-textarea::-webkit-scrollbar-track {
+  background: rgba(40, 40, 40, 0.5);
+}
+
+#note-textarea::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+
+#note-textarea::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+#menu-btn,
+#export-btn {
+  background-color: rgba(50, 50, 50, 0.9);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  opacity: 1.0;
+}
+
+#menu-btn:hover,
+#export-btn:hover {
+  background-color: rgba(70, 70, 70, 0.9);
+}
+
+#menu-btn {
+  font-size: 16px;
+  padding: 8px 10px;
+}

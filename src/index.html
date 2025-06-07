@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="stylesheet" href="styles.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Notes App</title>
+  <script type="module" src="/main.js" defer></script>
+</head>
+
+<body>
+  <main class="container">
+    <textarea id="note-textarea" placeholder="Start typing your notes..." spellcheck="true"></textarea>
+
+    <footer class="footer">
+      <div class="word-count">
+        <span id="word-count">0 words</span>
+      </div>
+      <div class="transparency-control">
+        <button id="menu-btn">E</button>
+        <button id="transparency-btn">Transparency: 100%</button>
+        <button id="menu-btn">☰</button>
+      </div>
+    </footer>
+  </main>
+  <div id="sidebar" class="sidebar">
+    <div class="sidebar-header">
+      <h3>Recent Notes</h3>
+      <button id="close-sidebar">×</button>
+    </div>
+    <div class="sidebar-content">
+      <div id="notes-list">
+        <!-- Notes will be populated here -->
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
