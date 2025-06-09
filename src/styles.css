@@ -60,7 +60,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 5px 10px;
+  padding: 3px 10px;
   background-color: rgba(242, 242, 247, 2.0);
   min-height: 10px;
 }
@@ -72,12 +72,11 @@ body {
 }
 
 .controls button {
-  background-color: rgba(188, 188, 192, 1.0);
-  width: 65px;
-  color: #000000;
+  background-color: transparent;
+  width: 35px;
   border: none;
   border-radius: 6px;
-  padding: 5px 5px;
+  padding: 3px 3px;
   font-size: 10px;
   cursor: pointer;
   transition: background-color 0.2s ease;
@@ -86,10 +85,6 @@ body {
 
 .controls button:hover {
   background-color: rgba(174, 174, 178, 1.0);
-}
-
-.controls button:active {
-  background-color: rgba(40, 40, 40, 1.0);
 }
 
 /* Scrollbar styling for webkit browsers */
