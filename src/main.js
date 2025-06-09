@@ -9,9 +9,6 @@ let wordCountEl;
 let transparencyBtn;
 let overlayVisible = false;
 let cheatsheetOverlay;
-let cheatsheetHoldTimer = null;
-let cheatsheetKeyHeld = false;
-let cheatsheetShownByHold = false;
 
 function updateWordCount() {
   const text = noteTextarea.value.trim();
@@ -89,17 +86,11 @@ window.addEventListener("DOMContentLoaded", () => {
   });
 
   document.querySelector("#question-btn").addEventListener("click", () => {
-    // If shown by hold, don't toggle on click
-    if (cheatsheetShownByHold) {
-      return;
-    }
-
-    // Normal toggle behavior for button clicks
+    // Simple toggle behavior
     if (overlayVisible) {
       hideCheatsheet();
     } else {
       showCheatsheet();
-      cheatsheetShownByHold = false; // Mark as not shown by hold
     }
   });
 
@@ -116,23 +107,19 @@ window.addEventListener("DOMContentLoaded", () => {
 
   // Keyboard shortcuts
   document.addEventListener("keydown", (e) => {
-    console.log("Key pressed:", e.key, "Code:", e.code, "Shift:", e.shiftKey);
     if (e.metaKey || e.ctrlKey) {
-      // Check for Cmd+? (matches the actual ? character)
-      if (e.key === "?") {
+      // Try multiple ways to detect the ? key
+      const isQuestionMark = e.key === "?" ||
+        (e.code === "Slash" && e.shiftKey) ||
+        (e.key === "/" && e.shiftKey);
+
+      if (isQuestionMark) {
         e.preventDefault();
 
-        // If not already held, start the hold behavior
-        if (!cheatsheetKeyHeld) {
-          cheatsheetKeyHeld = true;
-          cheatsheetShownByHold = true;
-
-          // Clear any existing timer
-          if (cheatsheetHoldTimer) {
-            clearTimeout(cheatsheetHoldTimer);
-          }
-
-          // Show immediately
+        // Simple toggle - same behavior as button click
+        if (overlayVisible) {
+          hideCheatsheet();
+        } else {
           showCheatsheet();
         }
         return;
@@ -145,23 +132,6 @@ window.addEventListener("DOMContentLoaded", () => {
     // Escape key to close overlay
     if (e.key === "Escape" && overlayVisible) {
       hideCheatsheet();
-    }
-  });
-
-
-  document.addEventListener("keyup", (e) => {
-    // For keyup, we need to be more careful since the key might not be "?" on release
-    // Check if any of the modifier keys were released or if it was the question mark
-    if (cheatsheetKeyHeld && (e.key === "?" || e.key === "/" || !e.metaKey || !e.ctrlKey)) {
-      cheatsheetKeyHeld = false;
-
-      // Only hide if it was shown by holding
-      if (cheatsheetShownByHold && overlayVisible) {
-        cheatsheetHoldTimer = setTimeout(() => {
-          hideCheatsheet();
-          cheatsheetShownByHold = false;
-        }, 50);
-      }
     }
   });
 
