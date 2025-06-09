@@ -7,6 +7,11 @@ let currentTransparencyIndex = 3; // Start at 100%
 let noteTextarea;
 let wordCountEl;
 let transparencyBtn;
+let overlayVisible = false;
+let cheatsheetOverlay;
+let cheatsheetHoldTimer = null;
+let cheatsheetKeyHeld = false;
+let cheatsheetShownByHold = false;
 
 function updateWordCount() {
   const text = noteTextarea.value.trim();
@@ -67,6 +72,7 @@ window.addEventListener("DOMContentLoaded", () => {
   noteTextarea = document.querySelector("#note-textarea");
   wordCountEl = document.querySelector("#word-count");
   transparencyBtn = document.querySelector("#transparency-btn");
+  cheatsheetOverlay = document.querySelector("#cheatsheet-overlay");
 
   loadNote();
   updateWordCount();
@@ -82,23 +88,82 @@ window.addEventListener("DOMContentLoaded", () => {
     saveNote();
   });
 
-
-  document.querySelector("#export-btn").addEventListener("click", async () => {
-    const text = noteTextarea.value.trim();
-    if (!text) {
-      alert('No content to export!');
+  document.querySelector("#question-btn").addEventListener("click", () => {
+    // If shown by hold, don't toggle on click
+    if (cheatsheetShownByHold) {
       return;
     }
-    try {
-      await exportNoteToApple(text);
-      alert('Note exported to Apple Notes successfully!');
-    } catch (error) {
-      console.error('Error exporting note:', error);
-      alert('Failed to export note: ' + error);
+
+    // Normal toggle behavior for button clicks
+    if (overlayVisible) {
+      hideCheatsheet();
+    } else {
+      showCheatsheet();
+      cheatsheetShownByHold = false; // Mark as not shown by hold
+    }
+  });
+
+  document.querySelector("#export-btn").addEventListener("click", async () => {
+    await exportNote();
+  });
+
+  // Close overlay when clicking outside the cheatsheet
+  cheatsheetOverlay.addEventListener("click", (e) => {
+    if (e.target === cheatsheetOverlay) {
+      hideCheatsheet();
+    }
+  });
+
+  // Keyboard shortcuts
+  document.addEventListener("keydown", (e) => {
+    console.log("Key pressed:", e.key, "Code:", e.code, "Shift:", e.shiftKey);
+    if (e.metaKey || e.ctrlKey) {
+      // Check for Cmd+? (matches the actual ? character)
+      if (e.key === "?") {
+        e.preventDefault();
+
+        // If not already held, start the hold behavior
+        if (!cheatsheetKeyHeld) {
+          cheatsheetKeyHeld = true;
+          cheatsheetShownByHold = true;
+
+          // Clear any existing timer
+          if (cheatsheetHoldTimer) {
+            clearTimeout(cheatsheetHoldTimer);
+          }
+
+          // Show immediately
+          showCheatsheet();
+        }
+        return;
+      } else if (e.key === "e" || e.key === "E") {
+        e.preventDefault();
+        exportNote();
+      }
+    }
+
+    // Escape key to close overlay
+    if (e.key === "Escape" && overlayVisible) {
+      hideCheatsheet();
     }
   });
 
 
+  document.addEventListener("keyup", (e) => {
+    // For keyup, we need to be more careful since the key might not be "?" on release
+    // Check if any of the modifier keys were released or if it was the question mark
+    if (cheatsheetKeyHeld && (e.key === "?" || e.key === "/" || !e.metaKey || !e.ctrlKey)) {
+      cheatsheetKeyHeld = false;
+
+      // Only hide if it was shown by holding
+      if (cheatsheetShownByHold && overlayVisible) {
+        cheatsheetHoldTimer = setTimeout(() => {
+          hideCheatsheet();
+          cheatsheetShownByHold = false;
+        }, 50);
+      }
+    }
+  });
 
   // Auto-save on window close
   window.addEventListener("beforeunload", saveNote);
@@ -106,3 +171,36 @@ window.addEventListener("DOMContentLoaded", () => {
   // Focus the textarea on load
   noteTextarea.focus();
 });
+
+function toggleCheatsheet() {
+  if (overlayVisible) {
+    hideCheatsheet();
+  } else {
+    showCheatsheet();
+  }
+}
+
+function showCheatsheet() {
+  cheatsheetOverlay.style.display = "flex";
+  overlayVisible = true;
+}
+
+function hideCheatsheet() {
+  cheatsheetOverlay.style.display = "none";
+  overlayVisible = false;
+}
+
+async function exportNote() {
+  const text = noteTextarea.value.trim();
+  if (!text) {
+    alert('No content to export!');
+    return;
+  }
+  try {
+    await exportNoteToApple(text);
+    alert('Note exported to Apple Notes successfully!');
+  } catch (error) {
+    console.error('Error exporting note:', error);
+    alert('Failed to export note: ' + error);
+  }
+}
