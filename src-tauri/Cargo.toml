@@ -1,7 +1,7 @@
 [package]
 name = "Tnotes"
 version = "0.1.0"
-description = "A Tauri App"
+description = "Notes with a tunable transparent background"
 authors = ["Max Mynter"]
 edition = "2021"
 
