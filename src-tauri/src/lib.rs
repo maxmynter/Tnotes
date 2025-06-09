@@ -19,7 +19,7 @@ async fn export_to_apple_notes(title: String, content: String) -> Result<String,
     {
         export_to_notes_macos(&title, &content).await
     }
-    #[cfg(not(target_os = "macos"))] // ADD THIS
+    #[cfg(not(target_os = "macos"))]
     {
         Err("Apple Notes export is only available on macOS".to_string())
     }
@@ -28,15 +28,20 @@ async fn export_to_apple_notes(title: String, content: String) -> Result<String,
 #[cfg(target_os = "macos")]
 async fn export_to_notes_macos(title: &str, content: &str) -> Result<String, String> {
     use std::process::Command;
+    let note_content = format!(
+        "<body><h1>{}</h1><br/><br/><p>{}</p></body>",
+        title.replace("\"", "\\\""),
+        content.replace("\"", "\\\"")
+    );
 
     let applescript = format!(
         r#"
     tell application "Notes"
-        make new note at folder "Notes" with properties {{name:"{}", body:"{}"}}
+        activate
+        make new note at folder "Notes" with properties {{name:" ", body:"{}"}}
     end tell
     "#,
-        title.replace("\"", "\\\""),
-        content.replace("\"", "\\\"")
+        note_content
     );
     let output = Command::new("osascript")
         .arg("-e")

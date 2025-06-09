@@ -59,10 +59,8 @@ async function exportNoteToApple(title, content) {
       content: content
     });
     console.log(result);
-    // Show success message to user
   } catch (error) {
     console.error('Error exporting note:', error);
-    // Show error message to user
   }
 }
 
@@ -71,12 +69,10 @@ window.addEventListener("DOMContentLoaded", () => {
   wordCountEl = document.querySelector("#word-count");
   transparencyBtn = document.querySelector("#transparency-btn");
 
-  // Initialize
   loadNote();
   updateWordCount();
   updateTransparency();
 
-  // Event listeners
   noteTextarea.addEventListener("input", () => {
     updateWordCount();
     saveNote();
@@ -89,15 +85,17 @@ window.addEventListener("DOMContentLoaded", () => {
 
 
   document.querySelector("#export-btn").addEventListener("click", async () => {
-    const content = noteTextarea.value.trim();
-    if (!content) {
+    const text = noteTextarea.value.trim();
+    if (!text) {
       alert('No content to export!');
       return;
     }
+    const firstLinebreak = text.indexOf('\n');
+    const title = firstLinebreak != -1 ? text.substring(0, firstLinebreak) : 'Tnote';
+    const content = firstLinebreak != -1 ? text.substring(firstLinebreak + 1) : text;
 
-    const title = content.split('\n')[0] || 'Note';
     try {
-      const result = await exportNoteToApple(title, content);
+      await exportNoteToApple(title, content);
       alert('Note exported to Apple Notes successfully!');
     } catch (error) {
       console.error('Error exporting note:', error);
