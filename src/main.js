@@ -52,11 +52,10 @@ function loadNote() {
   }
 }
 
-async function exportNoteToApple(title, content) {
+async function exportNoteToApple(note) {
   try {
     const result = await invoke('export_to_apple_notes', {
-      title: title,
-      content: content
+      note: note,
     });
     console.log(result);
   } catch (error) {
@@ -90,12 +89,8 @@ window.addEventListener("DOMContentLoaded", () => {
       alert('No content to export!');
       return;
     }
-    const firstLinebreak = text.indexOf('\n');
-    const title = firstLinebreak != -1 ? text.substring(0, firstLinebreak) : 'Tnote';
-    const content = firstLinebreak != -1 ? text.substring(firstLinebreak + 1) : text;
-
     try {
-      await exportNoteToApple(title, content);
+      await exportNoteToApple(text);
       alert('Note exported to Apple Notes successfully!');
     } catch (error) {
       console.error('Error exporting note:', error);
