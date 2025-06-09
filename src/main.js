@@ -22,9 +22,6 @@ function updateTransparency() {
 
   // Update CSS custom property
   document.documentElement.style.setProperty('--bg-opacity', opacity.toString());
-
-  // Update button text
-  transparencyBtn.textContent = `${percentage}%`;
 }
 
 function cycleTransparency() {
@@ -126,6 +123,10 @@ window.addEventListener("DOMContentLoaded", () => {
       } else if (e.key === "e" || e.key === "E") {
         e.preventDefault();
         exportNote();
+      } else if (e.key === "t" || e.key === "T") {
+        e.preventDefault();
+        cycleTransparency();
+        saveNote();
       }
     }
 

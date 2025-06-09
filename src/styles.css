@@ -115,10 +115,6 @@ body {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
-.cheatsheet h2 {
-  margin-top: 0;
-}
-
 .cheatsheet .box {
   background: rgb(216, 216, 220);
   padding: 15px;
